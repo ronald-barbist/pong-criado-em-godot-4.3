@@ -1,0 +1,104 @@
+[gd_scene load_steps=14 format=3 uid="uid://ba2vciywf310s"]
+
+[ext_resource type="PackedScene" uid="uid://c4e2icybmsjmo" path="res://player.tscn" id="1_itw3f"]
+[ext_resource type="Script" path="res://game.gd" id="1_ly5ul"]
+[ext_resource type="PackedScene" uid="uid://dv3xgvj5l7405" path="res://adversary.tscn" id="2_ho7lc"]
+[ext_resource type="PackedScene" uid="uid://cgmafq6dmiu0v" path="res://ball.tscn" id="2_ouemy"]
+[ext_resource type="PackedScene" uid="uid://bijmf2cjko6cn" path="res://hud.tscn" id="4_21xnm"]
+[ext_resource type="Script" path="res://player_score_area.gd" id="5_uqkfo"]
+[ext_resource type="Script" path="res://adversary_score_area.gd" id="7_cv5lh"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_wblct"]
+b = Vector2(1281, 1)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_betu7"]
+b = Vector2(1, 720)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_6di60"]
+a = Vector2(-2, 0)
+b = Vector2(1279, 1)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_qt8qe"]
+b = Vector2(1, 717)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6mvwn"]
+size = Vector2(61, 746)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lhuu7"]
+size = Vector2(60, 736)
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_ly5ul")
+
+[node name="HUD" parent="." instance=ExtResource("4_21xnm")]
+unique_name_in_owner = true
+follow_viewport_enabled = true
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 1282.0
+offset_bottom = 723.0
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -1.0
+offset_right = 5.0
+offset_bottom = 722.0
+grow_horizontal = 2
+
+[node name="PlayerStartingPoint" type="Marker2D" parent="."]
+position = Vector2(70, 360)
+
+[node name="Player" parent="PlayerStartingPoint" instance=ExtResource("1_itw3f")]
+unique_name_in_owner = true
+
+[node name="AdversaryStartingPoint" type="Marker2D" parent="."]
+position = Vector2(1210, 360)
+
+[node name="Adversary" parent="AdversaryStartingPoint" instance=ExtResource("2_ho7lc")]
+
+[node name="BallStartingPoint" type="Marker2D" parent="."]
+position = Vector2(111, 360)
+
+[node name="Ball" parent="BallStartingPoint" instance=ExtResource("2_ouemy")]
+unique_name_in_owner = true
+mass = 0.001
+
+[node name="Borda" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Borda"]
+shape = SubResource("SegmentShape2D_wblct")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Borda"]
+shape = SubResource("SegmentShape2D_betu7")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Borda"]
+position = Vector2(3, 720)
+shape = SubResource("SegmentShape2D_6di60")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Borda"]
+position = Vector2(1279, 2)
+shape = SubResource("SegmentShape2D_qt8qe")
+
+[node name="PlayerScoreArea" type="Area2D" parent="."]
+script = ExtResource("5_uqkfo")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerScoreArea"]
+position = Vector2(22, 362)
+shape = SubResource("RectangleShape2D_6mvwn")
+
+[node name="AdversaryScoreArea" type="Area2D" parent="."]
+script = ExtResource("7_cv5lh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AdversaryScoreArea"]
+position = Vector2(1258, 361)
+shape = SubResource("RectangleShape2D_lhuu7")
+
+[connection signal="player_moved" from="PlayerStartingPoint/Player" to="BallStartingPoint/Ball" method="move_ball"]
+[connection signal="body_entered" from="PlayerScoreArea" to="PlayerScoreArea" method="_on_body_entered"]
+[connection signal="restart_match" from="PlayerScoreArea" to="." method="restart_match"]
+[connection signal="body_entered" from="AdversaryScoreArea" to="AdversaryScoreArea" method="_on_body_entered"]
+[connection signal="restart_match" from="AdversaryScoreArea" to="." method="restart_match"]

@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://c4e2icybmsjmo"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_2haci"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fx72o"]
+size = Vector2(36, 232)
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_2haci")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -18.0
+offset_top = -116.0
+offset_right = 18.0
+offset_bottom = 116.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_fx72o")
